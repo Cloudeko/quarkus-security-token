@@ -1,0 +1,5 @@
+name: quarkus-security-token
+title: Security Token
+version: dev
+nav:
+  - modules/ROOT/nav.adoc
