@@ -1,5 +1,7 @@
 package io.quarkiverse.quarkus.security.token.runtime;
 
+import jakarta.inject.Inject;
+
 import io.quarkiverse.quarkus.security.token.Token;
 import io.quarkiverse.quarkus.security.token.TokenManager;
 import io.quarkiverse.quarkus.security.token.access.AccessToken;
@@ -8,7 +10,6 @@ import io.quarkiverse.quarkus.security.token.refresh.RefreshToken;
 import io.quarkiverse.quarkus.security.token.refresh.RefreshTokenManager;
 import io.smallrye.mutiny.Uni;
 import io.vertx.ext.auth.User;
-import jakarta.inject.Inject;
 
 public class DatabaseTokenManager implements TokenManager {
 

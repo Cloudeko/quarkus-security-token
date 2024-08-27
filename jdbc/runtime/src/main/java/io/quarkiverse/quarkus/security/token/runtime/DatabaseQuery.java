@@ -1,7 +1,9 @@
 package io.quarkiverse.quarkus.security.token.runtime;
 
 public enum DatabaseQuery {
-    STORE_REFRESH_TOKEN("INSERT INTO refresh_tokens (token, subject, revoked, expiry, issued_at) VALUES (%s, %s, false, %s, CURRENT_TIMESTAMP)", 3),
+    STORE_REFRESH_TOKEN(
+            "INSERT INTO refresh_tokens (token, subject, revoked, expiry, issued_at) VALUES (%s, %s, false, %s, CURRENT_TIMESTAMP)",
+            3),
     REMOVE_REFRESH_TOKEN("DELETE FROM refresh_tokens WHERE token = %s", 1),
     GET_REFRESH_TOKEN("SELECT token, subject, revoked, expiry, issued_at FROM refresh_tokens WHERE token = %s", 1),
     REVOKE_REFRESH_TOKEN("UPDATE refresh_tokens SET revoked = true WHERE token = %s", 1),
