@@ -1,4 +1,4 @@
-package io.quarkiverse.quarkus.security.token;
+package io.quarkiverse.quarkus.security.token.access;
 
 import io.vertx.ext.auth.User;
 

@@ -29,6 +29,14 @@
       <artifactId>quarkus-security-deployment</artifactId>
     </dependency>
     <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-smallrye-jwt-deployment</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-smallrye-jwt-build-deployment</artifactId>
+    </dependency>
+    <dependency>
       <groupId>io.quarkiverse.quarkus-security-token</groupId>
       <artifactId>quarkus-security-token-common</artifactId>
       <version>${project.version}</version>

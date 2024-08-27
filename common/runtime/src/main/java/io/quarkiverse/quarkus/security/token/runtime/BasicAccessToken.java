@@ -1,8 +1,6 @@
 package io.quarkiverse.quarkus.security.token.runtime;
 
-import io.quarkiverse.quarkus.security.token.AccessToken;
-import io.quarkus.smallrye.jwt.runtime.auth.JwtPrincipalProducer;
-import io.quarkus.vertx.http.runtime.security.QuarkusHttpUser;
+import io.quarkiverse.quarkus.security.token.access.AccessToken;
 
 public class BasicAccessToken implements AccessToken {
 
@@ -10,7 +8,7 @@ public class BasicAccessToken implements AccessToken {
     private final String type;
 
     public BasicAccessToken(String accessToken) {
-        this(accessToken, "jwt");
+        this(accessToken, "bearer");
     }
 
     public BasicAccessToken(String accessToken, String type) {

@@ -1,5 +1,7 @@
 package io.quarkiverse.quarkus.security.token;
 
+import io.quarkiverse.quarkus.security.token.access.AccessToken;
+import io.quarkiverse.quarkus.security.token.refresh.RefreshToken;
 import io.smallrye.mutiny.Uni;
 import io.vertx.ext.auth.User;
 
@@ -11,7 +13,9 @@ public interface TokenManager {
 
     Uni<Boolean> verifyAccessToken(AccessToken token);
 
-    Uni<Boolean> verifyRefreshToken(RefreshToken token);
+    default Uni<Boolean> verifyRefreshToken(RefreshToken token) {
+        throw new UnsupportedOperationException("Refresh token verification is not supported");
+    }
 
     default Uni<Boolean> revokeAccessToken(AccessToken token) {
         throw new UnsupportedOperationException("Revoke access token is not supported");

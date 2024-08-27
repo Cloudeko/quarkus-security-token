@@ -1,4 +1,4 @@
-package io.quarkiverse.quarkus.security.token;
+package io.quarkiverse.quarkus.security.token.refresh;
 
 import io.smallrye.mutiny.Uni;
 
