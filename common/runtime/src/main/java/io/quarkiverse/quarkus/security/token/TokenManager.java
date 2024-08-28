@@ -9,19 +9,17 @@ public interface TokenManager {
 
     Uni<Token> createToken(User user);
 
-    Uni<Token> createToken(Token token);
+    Uni<Boolean> verifyAccessToken(String token);
 
-    Uni<Boolean> verifyAccessToken(AccessToken token);
-
-    default Uni<Boolean> verifyRefreshToken(RefreshToken token) {
+    default Uni<Boolean> verifyRefreshToken(String token) {
         throw new UnsupportedOperationException("Refresh token verification is not supported");
     }
 
-    default Uni<Boolean> revokeAccessToken(AccessToken token) {
+    default Uni<Void> revokeAccessToken(AccessToken token) {
         throw new UnsupportedOperationException("Revoke access token is not supported");
     }
 
-    default Uni<Boolean> revokeRefreshToken(RefreshToken token) {
+    default Uni<Void> revokeRefreshToken(RefreshToken token) {
         throw new UnsupportedOperationException("Revoke refresh token is not supported");
     }
 

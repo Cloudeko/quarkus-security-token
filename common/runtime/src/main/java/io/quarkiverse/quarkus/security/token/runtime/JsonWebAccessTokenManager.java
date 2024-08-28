@@ -2,8 +2,6 @@ package io.quarkiverse.quarkus.security.token.runtime;
 
 import java.util.Objects;
 
-import jakarta.inject.Inject;
-
 import org.eclipse.microprofile.jwt.JsonWebToken;
 import org.jboss.logging.Logger;
 
@@ -24,7 +22,6 @@ public class JsonWebAccessTokenManager implements AccessTokenManager {
     private final JWTParser parser;
     private final CommonAccessTokenConfig config;
 
-    @Inject
     public JsonWebAccessTokenManager(JWTParser parser, CommonAccessTokenConfig config) {
         this.parser = parser;
         this.config = config;
@@ -65,9 +62,9 @@ public class JsonWebAccessTokenManager implements AccessTokenManager {
     }
 
     @Override
-    public Uni<Boolean> verifyToken(AccessToken token) {
+    public Uni<Boolean> verifyToken(String token) {
         try {
-            JsonWebToken jwt = parser.parse(token.getAccessToken());
+            JsonWebToken jwt = parser.parse(token);
             return Uni.createFrom().item(true);
         } catch (Exception e) {
             log.debug("Failed to verify token", e);

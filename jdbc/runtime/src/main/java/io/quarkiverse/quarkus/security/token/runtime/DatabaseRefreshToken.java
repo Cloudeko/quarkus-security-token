@@ -3,7 +3,7 @@ package io.quarkiverse.quarkus.security.token.runtime;
 import io.quarkiverse.quarkus.security.token.refresh.RefreshToken;
 import io.quarkiverse.quarkus.security.token.refresh.RefreshTokenUserProvider;
 import io.smallrye.mutiny.Uni;
-import io.vertx.mutiny.ext.auth.User;
+import io.vertx.ext.auth.User;
 import io.vertx.sqlclient.Row;
 
 public class DatabaseRefreshToken implements RefreshToken {

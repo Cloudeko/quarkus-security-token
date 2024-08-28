@@ -4,9 +4,9 @@ import io.smallrye.mutiny.Uni;
 
 public interface AccessTokenValidator {
 
-    Uni<Boolean> verifyToken(AccessToken token);
+    Uni<Boolean> verifyToken(String token);
 
-    default boolean verifyTokenBlocking(AccessToken token) {
+    default boolean verifyTokenBlocking(String token) {
         return verifyToken(token).await().indefinitely();
     }
 }
