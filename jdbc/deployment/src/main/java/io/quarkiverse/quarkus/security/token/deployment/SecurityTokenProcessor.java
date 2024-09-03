@@ -9,6 +9,7 @@ import java.util.Map;
 import jakarta.enterprise.context.Dependent;
 
 import io.quarkiverse.quarkus.security.token.runtime.*;
+import io.quarkus.arc.deployment.AdditionalBeanBuildItem;
 import io.quarkus.arc.deployment.SyntheticBeanBuildItem;
 import io.quarkus.builder.item.SimpleBuildItem;
 import io.quarkus.deployment.Capabilities;
@@ -26,6 +27,14 @@ class SecurityTokenProcessor {
     @BuildStep
     FeatureBuildItem feature() {
         return new FeatureBuildItem(FEATURE);
+    }
+
+    @BuildStep
+    AdditionalBeanBuildItem createDatabaseTokenProducer() {
+        return AdditionalBeanBuildItem.builder()
+                .addBeanClass(DatabaseTokenProducer.class)
+                .setUnremovable()
+                .build();
     }
 
     @BuildStep
