@@ -2,7 +2,6 @@ package io.quarkiverse.quarkus.security.token.runtime;
 
 import io.quarkiverse.quarkus.security.token.Token;
 import io.quarkiverse.quarkus.security.token.TokenManager;
-import io.quarkiverse.quarkus.security.token.access.AccessToken;
 import io.quarkiverse.quarkus.security.token.access.AccessTokenManager;
 import io.smallrye.mutiny.Uni;
 import io.vertx.ext.auth.User;
@@ -17,8 +16,7 @@ public class DefaultTokenManager implements TokenManager {
 
     @Override
     public Uni<Token> createToken(User user) {
-        AccessToken accessToken = accessTokenManager.createAccessToken(user);
-        return Uni.createFrom().item(new BasicToken(accessToken));
+        return Uni.createFrom().item(new BasicToken(accessTokenManager.createAccessToken(user)));
     }
 
     @Override

@@ -1,7 +1,8 @@
 package io.quarkiverse.quarkus.security.token.access;
 
+import io.quarkus.security.credential.TokenCredential;
 import io.vertx.ext.auth.User;
 
 public interface AccessTokenProducer {
-    AccessToken createAccessToken(User user);
+    TokenCredential createAccessToken(User user);
 }

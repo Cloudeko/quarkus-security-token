@@ -2,12 +2,12 @@ package io.quarkiverse.quarkus.security.token.runtime;
 
 import io.quarkiverse.quarkus.security.token.Token;
 import io.quarkiverse.quarkus.security.token.TokenManager;
-import io.quarkiverse.quarkus.security.token.access.AccessToken;
 import io.quarkiverse.quarkus.security.token.access.AccessTokenManager;
-import io.quarkiverse.quarkus.security.token.refresh.RefreshToken;
+import io.quarkiverse.quarkus.security.token.refresh.RefreshTokenCredential;
 import io.quarkiverse.quarkus.security.token.refresh.RefreshTokenManager;
 import io.quarkiverse.quarkus.security.token.refresh.RefreshTokenStorageProvider;
 import io.quarkiverse.quarkus.security.token.refresh.RefreshTokenUserProvider;
+import io.quarkus.security.credential.TokenCredential;
 import io.smallrye.mutiny.Uni;
 import io.vertx.ext.auth.User;
 
@@ -30,8 +30,8 @@ public class DatabaseTokenManager implements TokenManager {
 
     @Override
     public Uni<Token> createToken(User user) {
-        AccessToken accessToken = accessTokenManager.createAccessToken(user);
-        RefreshToken refreshToken = refreshTokenManager.createRefreshToken(user);
+        TokenCredential accessToken = accessTokenManager.createAccessToken(user);
+        RefreshTokenCredential refreshToken = refreshTokenManager.createRefreshToken(user);
 
         return refreshTokenStorageProvider.storeRefreshToken(refreshToken)
                 .replaceWith(new BasicToken(accessToken, refreshToken));
@@ -48,24 +48,24 @@ public class DatabaseTokenManager implements TokenManager {
     }
 
     @Override
-    public Uni<Void> revokeRefreshToken(RefreshToken token) {
+    public Uni<Void> revokeRefreshToken(RefreshTokenCredential token) {
         return refreshTokenStorageProvider.revokeRefreshToken(token.getRefreshToken());
     }
 
     @Override
-    public Uni<Token> refreshToken(RefreshToken token) {
+    public Uni<Token> refreshToken(RefreshTokenCredential token) {
         return Uni.combine().all().unis(getUser(token), refreshTokenManager.swapRefreshToken(token.getRefreshToken())).asTuple()
                 .onItem().transform(tuple -> {
                     User user = tuple.getItem1();
-                    RefreshToken newToken = tuple.getItem2();
+                    RefreshTokenCredential newToken = tuple.getItem2();
 
-                    AccessToken accessToken = accessTokenManager.createAccessToken(user);
+                    TokenCredential accessToken = accessTokenManager.createAccessToken(user);
 
                     return new BasicToken(accessToken, newToken);
                 });
     }
 
-    private Uni<User> getUser(RefreshToken token) {
+    private Uni<User> getUser(RefreshTokenCredential token) {
         return refreshTokenUserProvider.getUser(token);
     }
 }

@@ -1,13 +1,13 @@
 package io.quarkiverse.quarkus.security.token.runtime;
 
-public record DatabaseCababilities(String clientType) {
-    public DatabaseCababilities {
+public record DatabaseCapabilities(String clientType) {
+    public DatabaseCapabilities {
         if (clientType == null) {
             throw new IllegalArgumentException("clientType must not be null");
         }
     }
 
-    public static DatabaseCababilities of(String clientType) {
+    public static DatabaseCapabilities of(String clientType) {
         String capability = switch (clientType) {
             case "reactive-pg-client" -> DatabaseCapability.POSTGRESQL_CLIENT;
             case "reactive-mssql-client" -> DatabaseCapability.MSSQL_CLIENT;
@@ -17,6 +17,6 @@ public record DatabaseCababilities(String clientType) {
             default -> throw new IllegalArgumentException("Unknown reactive SQL client " + clientType);
         };
 
-        return new DatabaseCababilities(capability);
+        return new DatabaseCapabilities(capability);
     }
 }

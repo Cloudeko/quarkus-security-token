@@ -4,5 +4,5 @@ import io.smallrye.mutiny.Uni;
 import io.vertx.ext.auth.User;
 
 public interface RefreshTokenUserProvider {
-    Uni<User> getUser(RefreshToken refreshToken);
+    Uni<User> getUser(RefreshTokenCredential refreshToken);
 }

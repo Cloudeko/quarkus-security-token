@@ -5,9 +5,10 @@ import java.util.Objects;
 import org.eclipse.microprofile.jwt.JsonWebToken;
 import org.jboss.logging.Logger;
 
-import io.quarkiverse.quarkus.security.token.access.AccessToken;
 import io.quarkiverse.quarkus.security.token.access.AccessTokenManager;
+import io.quarkus.security.credential.TokenCredential;
 import io.quarkus.security.identity.SecurityIdentity;
+import io.quarkus.smallrye.jwt.runtime.auth.JsonWebTokenCredential;
 import io.quarkus.vertx.http.runtime.security.QuarkusHttpUser;
 import io.smallrye.jwt.auth.principal.JWTParser;
 import io.smallrye.jwt.build.Jwt;
@@ -28,7 +29,7 @@ public class JsonWebAccessTokenManager implements AccessTokenManager {
     }
 
     @Override
-    public AccessToken createAccessToken(User user) {
+    public TokenCredential createAccessToken(User user) {
         if (!(user instanceof QuarkusHttpUser quarkusUser)) {
             throw new IllegalArgumentException("User must be an instance of QuarkusHttpUser");
         }
@@ -55,10 +56,10 @@ public class JsonWebAccessTokenManager implements AccessTokenManager {
         }
 
         if (config.privateKeyLocation().isPresent()) {
-            return new BasicAccessToken(claims.sign(config.privateKeyLocation().get()));
+            return new JsonWebTokenCredential(claims.sign(config.privateKeyLocation().get()));
         }
 
-        return new BasicAccessToken(claims.sign());
+        return new JsonWebTokenCredential(claims.sign());
     }
 
     @Override

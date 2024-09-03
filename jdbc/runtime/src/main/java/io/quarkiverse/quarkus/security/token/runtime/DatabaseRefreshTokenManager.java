@@ -3,7 +3,7 @@ package io.quarkiverse.quarkus.security.token.runtime;
 import java.util.Base64;
 import java.util.UUID;
 
-import io.quarkiverse.quarkus.security.token.refresh.RefreshToken;
+import io.quarkiverse.quarkus.security.token.refresh.RefreshTokenCredential;
 import io.quarkiverse.quarkus.security.token.refresh.RefreshTokenManager;
 import io.quarkiverse.quarkus.security.token.refresh.RefreshTokenStorageProvider;
 import io.quarkiverse.quarkus.security.token.refresh.RefreshTokenUserProvider;
@@ -25,7 +25,7 @@ public class DatabaseRefreshTokenManager implements RefreshTokenManager {
     }
 
     @Override
-    public RefreshToken createRefreshToken(User user) {
+    public RefreshTokenCredential createRefreshToken(User user) {
         StringBuilder refreshToken = new StringBuilder();
 
         if (config.prefix().isPresent()) {
@@ -37,7 +37,7 @@ public class DatabaseRefreshTokenManager implements RefreshTokenManager {
 
         refreshToken.append(base64Token);
 
-        return new DatabaseRefreshToken(user.subject(), refreshToken.toString(),
+        return new DatabaseRefreshTokenCredential(user.subject(), refreshToken.toString(),
                 System.currentTimeMillis() + 1000L * 60 * 60 * 24 * 30);
     }
 
@@ -48,7 +48,7 @@ public class DatabaseRefreshTokenManager implements RefreshTokenManager {
     }
 
     @Override
-    public Uni<RefreshToken> swapRefreshToken(String refreshToken) {
+    public Uni<RefreshTokenCredential> swapRefreshToken(String refreshToken) {
         return refreshTokenStorageProvider.getRefreshToken(refreshToken).flatMap(token -> {
             if (token == null || !token.isValid()) {
                 return null;

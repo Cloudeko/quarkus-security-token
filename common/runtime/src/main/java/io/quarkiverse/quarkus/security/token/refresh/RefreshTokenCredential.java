@@ -1,6 +1,8 @@
 package io.quarkiverse.quarkus.security.token.refresh;
 
-public interface RefreshToken {
+import io.quarkus.security.credential.Credential;
+
+public interface RefreshTokenCredential extends Credential {
     String getSubject();
 
     String getRefreshToken();

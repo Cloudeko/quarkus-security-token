@@ -1,19 +1,19 @@
 package io.quarkiverse.quarkus.security.token;
 
-import io.quarkiverse.quarkus.security.token.access.AccessToken;
-import io.quarkiverse.quarkus.security.token.refresh.RefreshToken;
+import io.quarkiverse.quarkus.security.token.refresh.RefreshTokenCredential;
+import io.quarkus.security.credential.TokenCredential;
 
 public interface Token {
-    AccessToken getAccessToken();
+    TokenCredential getAccessToken();
 
-    RefreshToken getRefreshToken();
+    RefreshTokenCredential getRefreshToken();
 
     default String getRawAccessToken() {
         if (getAccessToken() == null) {
             return null;
         }
 
-        return getAccessToken().getAccessToken();
+        return getAccessToken().getToken();
     }
 
     default String getRawRefreshToken() {

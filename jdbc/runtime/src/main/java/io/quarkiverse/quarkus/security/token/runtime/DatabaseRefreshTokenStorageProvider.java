@@ -2,7 +2,7 @@ package io.quarkiverse.quarkus.security.token.runtime;
 
 import org.jboss.logging.Logger;
 
-import io.quarkiverse.quarkus.security.token.refresh.RefreshToken;
+import io.quarkiverse.quarkus.security.token.refresh.RefreshTokenCredential;
 import io.quarkiverse.quarkus.security.token.refresh.RefreshTokenStorageProvider;
 import io.smallrye.mutiny.Uni;
 import io.vertx.sqlclient.Pool;
@@ -26,7 +26,7 @@ public class DatabaseRefreshTokenStorageProvider implements RefreshTokenStorageP
     }
 
     @Override
-    public Uni<Void> storeRefreshToken(RefreshToken refreshToken) {
+    public Uni<Void> storeRefreshToken(RefreshTokenCredential refreshToken) {
         return Uni.createFrom()
                 .completionStage(pool
                         .withTransaction(client -> client
@@ -55,7 +55,7 @@ public class DatabaseRefreshTokenStorageProvider implements RefreshTokenStorageP
     }
 
     @Override
-    public Uni<RefreshToken> getRefreshToken(String refreshToken) {
+    public Uni<RefreshTokenCredential> getRefreshToken(String refreshToken) {
         return Uni.createFrom()
                 .completionStage(pool
                         .withTransaction(client -> client
@@ -63,8 +63,8 @@ public class DatabaseRefreshTokenStorageProvider implements RefreshTokenStorageP
                                 .execute(Tuple.of(refreshToken)))
                         .toCompletionStage())
                 .onItem().transformToUni(DatabaseUtil::processNullableRow)
-                .onItem().transform(DatabaseRefreshToken::new)
-                .onItem().castTo(RefreshToken.class)
+                .onItem().transform(DatabaseRefreshTokenCredential::new)
+                .onItem().castTo(RefreshTokenCredential.class)
                 .onFailure().invoke(throwable -> log.error("Failed to get refresh token", throwable));
     }
 

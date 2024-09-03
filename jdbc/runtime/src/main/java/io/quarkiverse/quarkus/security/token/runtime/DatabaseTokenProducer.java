@@ -36,7 +36,7 @@ public class DatabaseTokenProducer {
 
     @Produces
     @Priority(Byte.MAX_VALUE)
-    public RefreshTokenStorageProvider refreshTokenStorageProvider(DatabaseCababilities client, Pool pool) {
+    public RefreshTokenStorageProvider refreshTokenStorageProvider(DatabaseCapabilities client, Pool pool) {
         return new DatabaseRefreshTokenStorageProvider(client.clientType(), pool);
     }
 }

@@ -4,11 +4,11 @@ import static io.quarkus.deployment.Capability.*;
 import static io.quarkus.deployment.annotations.ExecutionTime.STATIC_INIT;
 
 import java.util.Arrays;
+import java.util.Map;
 
 import jakarta.enterprise.context.Dependent;
 
-import io.quarkiverse.quarkus.security.token.runtime.DatabaseCababilities;
-import io.quarkiverse.quarkus.security.token.runtime.DatabaseTokenRecorder;
+import io.quarkiverse.quarkus.security.token.runtime.*;
 import io.quarkus.arc.deployment.SyntheticBeanBuildItem;
 import io.quarkus.builder.item.SimpleBuildItem;
 import io.quarkus.deployment.Capabilities;
@@ -39,12 +39,35 @@ class SecurityTokenProcessor {
     }
 
     @BuildStep
+    DatabaseCapabilitiesBuildItem createDatabaseCapabilities(ReactiveClientBuildItem reactiveClient) {
+        return new DatabaseCapabilitiesBuildItem(
+                DatabaseCapability.reactiveClientToDatabaseClient(reactiveClient.getReactiveClient()));
+    }
+
+    @BuildStep
     @Record(STATIC_INIT)
-    SyntheticBeanBuildItem createBasicUserInitializerConfig(DatabaseTokenRecorder recorder,
-            ReactiveClientBuildItem reactiveClient) {
+    SyntheticBeanBuildItem createDatabaseCapabilities(DatabaseTokenRecorder recorder,
+            DatabaseCapabilitiesBuildItem database) {
         return SyntheticBeanBuildItem
-                .configure(DatabaseCababilities.class)
-                .supplier(recorder.createDatabaseClient(reactiveClient.getReactiveClient()))
+                .configure(DatabaseCapabilities.class)
+                .supplier(recorder.createDatabaseClient(database.getClientType()))
+                .scope(Dependent.class)
+                .unremovable()
+                .done();
+    }
+
+    @BuildStep
+    @Record(STATIC_INIT)
+    SyntheticBeanBuildItem createDatabaseInitializer(DatabaseTokenRecorder recorder,
+            DatabaseCapabilitiesBuildItem database) {
+        final DatabaseInitialization databaseInitialization = DatabaseInitialization.of(database.getClientType());
+        final Map<String, Boolean> tableSchemas = Map.of(
+                databaseInitialization.getAccessTokensTableQuery(), databaseInitialization.supportsIfNotExists(),
+                databaseInitialization.getRefreshTokensTableQuery(), databaseInitialization.supportsIfNotExists());
+
+        return SyntheticBeanBuildItem
+                .configure(DatabaseTokenInitializer.InitializerProperties.class)
+                .supplier(recorder.createUserAccountInitializerProps(tableSchemas))
                 .scope(Dependent.class)
                 .unremovable()
                 .done();
@@ -60,6 +83,19 @@ class SecurityTokenProcessor {
 
         public String getReactiveClient() {
             return reactiveClient;
+        }
+    }
+
+    private static final class DatabaseCapabilitiesBuildItem extends SimpleBuildItem {
+
+        private final String clientType;
+
+        private DatabaseCapabilitiesBuildItem(String clientType) {
+            this.clientType = clientType;
+        }
+
+        public String getClientType() {
+            return clientType;
         }
     }
 }
