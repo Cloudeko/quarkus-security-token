@@ -1,8 +1,10 @@
 package io.quarkiverse.quarkus.security.token.runtime;
 
 import jakarta.annotation.Priority;
+import jakarta.enterprise.inject.Alternative;
 import jakarta.enterprise.inject.Produces;
 import jakarta.inject.Inject;
+import jakarta.inject.Singleton;
 
 import io.quarkiverse.quarkus.security.token.TokenManager;
 import io.quarkiverse.quarkus.security.token.access.AccessTokenManager;
@@ -17,6 +19,8 @@ public class DatabaseTokenProducer {
     DatabaseRefreshTokenConfig databaseRefreshTokenConfig;
 
     @Produces
+    @Singleton
+    @Alternative
     @Priority(Byte.MAX_VALUE)
     public TokenManager tokenManager(AccessTokenManager accessTokenManager,
             RefreshTokenManager refreshTokenManager,

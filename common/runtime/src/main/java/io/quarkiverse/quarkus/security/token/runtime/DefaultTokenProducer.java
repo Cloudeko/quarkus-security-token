@@ -4,10 +4,12 @@ import jakarta.annotation.Priority;
 import jakarta.enterprise.inject.Default;
 import jakarta.enterprise.inject.Produces;
 import jakarta.inject.Inject;
+import jakarta.inject.Singleton;
 
 import io.quarkiverse.quarkus.security.token.TokenManager;
 import io.quarkiverse.quarkus.security.token.access.AccessTokenManager;
 import io.quarkiverse.quarkus.security.token.refresh.RefreshTokenUserProvider;
+import io.quarkus.arc.DefaultBean;
 import io.smallrye.jwt.auth.principal.JWTParser;
 
 public class DefaultTokenProducer {
@@ -18,9 +20,9 @@ public class DefaultTokenProducer {
     @Inject
     CommonAccessTokenConfig commonAccessTokenConfig;
 
-    @Default
     @Produces
-    @Priority(1)
+    @Singleton
+    @DefaultBean
     public TokenManager tokenManager(AccessTokenManager accessTokenManager) {
         return new DefaultTokenManager(accessTokenManager);
     }
