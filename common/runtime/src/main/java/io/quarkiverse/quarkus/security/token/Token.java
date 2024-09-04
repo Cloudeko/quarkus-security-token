@@ -1,9 +1,10 @@
 package io.quarkiverse.quarkus.security.token;
 
 import io.quarkiverse.quarkus.security.token.refresh.RefreshTokenCredential;
+import io.quarkus.security.credential.Credential;
 import io.quarkus.security.credential.TokenCredential;
 
-public interface Token {
+public interface Token extends Credential {
     TokenCredential getAccessToken();
 
     RefreshTokenCredential getRefreshToken();
@@ -24,7 +25,11 @@ public interface Token {
         return getRefreshToken().getRefreshToken();
     }
 
+    default String getType() {
+        return getAccessToken() != null ? getAccessToken().getType() : null;
+    }
+
     default boolean isRefreshable() {
-        return true;
+        return getRefreshToken() != null && getRefreshToken().isValid();
     }
 }

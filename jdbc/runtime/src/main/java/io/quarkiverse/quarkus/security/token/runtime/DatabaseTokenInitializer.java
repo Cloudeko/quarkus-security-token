@@ -1,6 +1,6 @@
 package io.quarkiverse.quarkus.security.token.runtime;
 
-import java.util.Map;
+import java.util.List;
 
 import jakarta.enterprise.event.Observes;
 
@@ -19,18 +19,18 @@ public class DatabaseTokenInitializer {
     void initialize(@Observes StartupEvent event, Vertx vertx, Pool pool, InitializerProperties properties) {
         log.debug("Initializing token database tables");
 
-        Map<String, Boolean> tableSchemas = properties.tables();
+        List<InitializerProperties.TableSchema> tableSchemas = properties.tables();
         if (tableSchemas == null || tableSchemas.isEmpty()) {
             log.warn("No table schemas provided, skipping database table creation");
             return;
         }
 
-        tableSchemas.forEach((ddl, supportsIfNotExists) -> {
-            createDatabaseTable(pool, ddl, supportsIfNotExists);
+        tableSchemas.forEach(tableSchema -> {
+            createDatabaseTable(pool, tableSchema.table(), tableSchema.ddl(), tableSchema.supportsIfNotExists());
         });
     }
 
-    private static void createDatabaseTable(Pool pool, String createTableDdl, boolean supportsIfTableNotExists) {
+    private static void createDatabaseTable(Pool pool, String table, String createTableDdl, boolean supportsIfTableNotExists) {
         log.debugf("Creating database table with query: %s", createTableDdl);
 
         Uni<String> tableCreationResult = Uni.createFrom()
@@ -43,7 +43,7 @@ public class DatabaseTokenInitializer {
                                 : Uni.createFrom().nullItem();
                     }
 
-                    return verifyTableExists(pool);
+                    return verifyTableExists(pool, table);
                 });
 
         String errMsg = tableCreationResult.await().indefinitely();
@@ -52,9 +52,9 @@ public class DatabaseTokenInitializer {
         }
     }
 
-    private static Uni<String> verifyTableExists(Pool pool) {
+    private static Uni<String> verifyTableExists(Pool pool, String table) {
         return Uni.createFrom()
-                .completionStage(pool.query("SELECT MAX(token) FROM access_tokens").execute().toCompletionStage())
+                .completionStage(pool.query("SELECT MAX(token) FROM " + table).execute().toCompletionStage())
                 .map(rows -> {
                     if (rows != null && rows.columnsNames().size() == 1) {
                         return null; // Table exists
@@ -67,7 +67,9 @@ public class DatabaseTokenInitializer {
                 });
     }
 
-    public record InitializerProperties(Map<String, Boolean> tables) {
+    public record InitializerProperties(List<TableSchema> tables) {
 
+        public record TableSchema(String table, String ddl, boolean supportsIfNotExists) {
+        }
     }
 }

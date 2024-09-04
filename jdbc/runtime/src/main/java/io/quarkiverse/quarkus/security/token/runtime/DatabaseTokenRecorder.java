@@ -1,6 +1,6 @@
 package io.quarkiverse.quarkus.security.token.runtime;
 
-import java.util.Map;
+import java.util.List;
 import java.util.function.Supplier;
 
 import io.quarkus.runtime.annotations.Recorder;
@@ -13,7 +13,7 @@ public class DatabaseTokenRecorder {
     }
 
     public Supplier<DatabaseTokenInitializer.InitializerProperties> createUserAccountInitializerProps(
-            Map<String, Boolean> tableSchemas) {
+            List<DatabaseTokenInitializer.InitializerProperties.TableSchema> tableSchemas) {
         return () -> new DatabaseTokenInitializer.InitializerProperties(tableSchemas);
     }
 }

@@ -4,7 +4,7 @@ import static io.quarkus.deployment.Capability.*;
 import static io.quarkus.deployment.annotations.ExecutionTime.STATIC_INIT;
 
 import java.util.Arrays;
-import java.util.Map;
+import java.util.List;
 
 import jakarta.enterprise.context.Dependent;
 
@@ -30,9 +30,10 @@ class SecurityTokenProcessor {
     }
 
     @BuildStep
-    AdditionalBeanBuildItem createDatabaseTokenProducer() {
+    AdditionalBeanBuildItem createAdditionalBeans() {
         return AdditionalBeanBuildItem.builder()
                 .addBeanClass(DatabaseTokenProducer.class)
+                .addBeanClass(DatabaseTokenInitializer.class)
                 .setUnremovable()
                 .build();
     }
@@ -69,10 +70,12 @@ class SecurityTokenProcessor {
     @Record(STATIC_INIT)
     SyntheticBeanBuildItem createDatabaseInitializer(DatabaseTokenRecorder recorder,
             DatabaseCapabilitiesBuildItem database) {
-        final DatabaseInitialization databaseInitialization = DatabaseInitialization.of(database.getClientType());
-        final Map<String, Boolean> tableSchemas = Map.of(
-                databaseInitialization.getAccessTokensTableQuery(), databaseInitialization.supportsIfNotExists(),
-                databaseInitialization.getRefreshTokensTableQuery(), databaseInitialization.supportsIfNotExists());
+        final DatabaseInitialization initialization = DatabaseInitialization.of(database.getClientType());
+        final List<DatabaseTokenInitializer.InitializerProperties.TableSchema> tableSchemas = List.of(
+                new DatabaseTokenInitializer.InitializerProperties.TableSchema(initialization.getAccessTokensTable(),
+                        initialization.getAccessTokensTableQuery(), initialization.supportsIfNotExists()),
+                new DatabaseTokenInitializer.InitializerProperties.TableSchema(initialization.getRefreshTokensTable(),
+                        initialization.getRefreshTokensTableQuery(), initialization.supportsIfNotExists()));
 
         return SyntheticBeanBuildItem
                 .configure(DatabaseTokenInitializer.InitializerProperties.class)

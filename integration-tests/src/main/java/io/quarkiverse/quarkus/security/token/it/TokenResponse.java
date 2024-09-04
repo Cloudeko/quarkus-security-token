@@ -23,7 +23,7 @@ public class TokenResponse {
 
     public TokenResponse(Token sessionToken) {
         this.accessToken = sessionToken.getRawAccessToken();
-        this.tokenType = sessionToken.getAccessToken().getType();
+        this.tokenType = sessionToken.getType();
         this.expiresIn = 3600;
         this.refreshToken = sessionToken.getRawRefreshToken();
     }

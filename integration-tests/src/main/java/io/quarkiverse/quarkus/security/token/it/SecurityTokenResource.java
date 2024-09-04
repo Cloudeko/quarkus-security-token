@@ -26,12 +26,12 @@ import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.SecurityContext;
 
+import io.quarkiverse.quarkus.security.token.Token;
 import io.quarkiverse.quarkus.security.token.TokenManager;
 import io.quarkus.security.runtime.QuarkusPrincipal;
 import io.quarkus.security.runtime.QuarkusSecurityIdentity;
 import io.quarkus.smallrye.jwt.runtime.auth.BearerTokenAuthentication;
 import io.quarkus.vertx.http.runtime.security.QuarkusHttpUser;
-import io.smallrye.mutiny.Uni;
 
 @Path("/security-token")
 @ApplicationScoped
@@ -41,12 +41,13 @@ public class SecurityTokenResource {
     TokenManager tokenManager;
 
     @POST
-    public Uni<Response> createToken(@QueryParam("subject") String subject) {
+    public Response createToken(@QueryParam("subject") String subject) {
         QuarkusPrincipal principal = new QuarkusPrincipal(subject);
         QuarkusSecurityIdentity identity = QuarkusSecurityIdentity.builder().setPrincipal(principal).build();
         QuarkusHttpUser user = new QuarkusHttpUser(identity);
+        Token token = tokenManager.createTokenBlocking(user);
 
-        return tokenManager.createToken(user).map(token -> Response.ok(new TokenResponse(token)).build());
+        return Response.ok(new TokenResponse(token)).build();
     }
 
     @GET
