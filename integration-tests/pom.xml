@@ -35,6 +35,11 @@
 
     <dependency>
       <groupId>io.quarkiverse.quarkus-security-token</groupId>
+      <artifactId>quarkus-security-token-jwt</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>io.quarkiverse.quarkus-security-token</groupId>
       <artifactId>quarkus-security-token-jdbc</artifactId>
       <version>${project.version}</version>
     </dependency>
