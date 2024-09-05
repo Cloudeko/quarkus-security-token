@@ -51,6 +51,10 @@ public class DefaultTokenManager implements TokenManager {
             operations.add(refreshTokenStorageProvider.storeRefreshToken(refreshToken));
         }
 
+        if (operations.isEmpty()) {
+            return Uni.createFrom().item(new BasicToken(accessToken, refreshToken));
+        }
+
         return Uni.combine().all().unis(operations).with((ignored) -> new BasicToken(accessToken, refreshToken));
     }
 

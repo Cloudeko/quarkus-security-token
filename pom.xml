@@ -20,6 +20,7 @@
     <module>jwt</module>
     <module>jdbc</module>
     <module>docs</module>
+    <module>integration-tests</module>
   </modules>
 
   <scm>
@@ -68,19 +69,4 @@
       </plugins>
     </pluginManagement>
   </build>
-
-  <profiles>
-    <profile>
-      <id>it</id>
-      <activation>
-        <property>
-          <name>performRelease</name>
-          <value>!true</value>
-        </property>
-      </activation>
-      <modules>
-        <module>integration-tests</module>
-      </modules>
-    </profile>
-  </profiles>
 </project>
