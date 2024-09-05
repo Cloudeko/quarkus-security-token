@@ -1,4 +1,4 @@
-package io.quarkiverse.quarkus.security.token.runtime;
+package io.quarkiverse.quarkus.security.token.jwt;
 
 import java.util.Objects;
 
@@ -21,9 +21,9 @@ public class JsonWebAccessTokenManager implements AccessTokenManager {
     private static final Logger log = Logger.getLogger(JsonWebAccessTokenManager.class);
 
     private final JWTParser parser;
-    private final CommonAccessTokenConfig config;
+    private final JsonWebTokenConfig config;
 
-    public JsonWebAccessTokenManager(JWTParser parser, CommonAccessTokenConfig config) {
+    public JsonWebAccessTokenManager(JWTParser parser, JsonWebTokenConfig config) {
         this.parser = parser;
         this.config = config;
     }

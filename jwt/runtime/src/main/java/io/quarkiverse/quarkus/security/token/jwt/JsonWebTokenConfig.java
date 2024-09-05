@@ -1,4 +1,4 @@
-package io.quarkiverse.quarkus.security.token.runtime;
+package io.quarkiverse.quarkus.security.token.jwt;
 
 import java.time.Duration;
 import java.util.Optional;
@@ -11,7 +11,7 @@ import io.smallrye.config.WithName;
 
 @ConfigRoot(phase = ConfigPhase.RUN_TIME)
 @ConfigMapping(prefix = "quarkus.security.token.access.jwt")
-public interface CommonAccessTokenConfig {
+public interface JsonWebTokenConfig {
 
     /**
      * The issuer of the token.

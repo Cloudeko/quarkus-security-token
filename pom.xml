@@ -17,6 +17,7 @@
 
   <modules>
     <module>common</module>
+    <module>jwt</module>
     <module>jdbc</module>
     <module>docs</module>
   </modules>

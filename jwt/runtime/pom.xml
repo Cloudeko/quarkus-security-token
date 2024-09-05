@@ -4,29 +4,26 @@
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>io.quarkiverse.quarkus-security-token</groupId>
-    <artifactId>quarkus-security-token-common-parent</artifactId>
+    <artifactId>quarkus-security-token-jwt-parent</artifactId>
     <version>999-SNAPSHOT</version>
   </parent>
 
-  <artifactId>quarkus-security-token-common</artifactId>
-  <name>Quarkus Security Token - Common - Runtime</name>
+  <artifactId>quarkus-security-token-jwt</artifactId>
+  <name>Quarkus Security Token - JWT - Runtime</name>
 
   <dependencies>
     <dependency>
-      <groupId>io.quarkus</groupId>
-      <artifactId>quarkus-arc</artifactId>
+      <groupId>io.quarkiverse.quarkus-security-token</groupId>
+      <artifactId>quarkus-security-token-common</artifactId>
+      <version>${project.version}</version>
     </dependency>
     <dependency>
       <groupId>io.quarkus</groupId>
-      <artifactId>quarkus-vertx</artifactId>
+      <artifactId>quarkus-smallrye-jwt</artifactId>
     </dependency>
     <dependency>
       <groupId>io.quarkus</groupId>
-      <artifactId>quarkus-vertx-http</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>io.quarkus</groupId>
-      <artifactId>quarkus-security</artifactId>
+      <artifactId>quarkus-smallrye-jwt-build</artifactId>
     </dependency>
   </dependencies>
 
