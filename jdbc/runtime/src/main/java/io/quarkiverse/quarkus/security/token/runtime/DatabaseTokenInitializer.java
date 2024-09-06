@@ -1,15 +1,13 @@
 package io.quarkiverse.quarkus.security.token.runtime;
 
-import java.util.List;
-
-import jakarta.enterprise.event.Observes;
-
-import org.jboss.logging.Logger;
-
 import io.quarkus.runtime.StartupEvent;
 import io.smallrye.mutiny.Uni;
 import io.vertx.core.Vertx;
 import io.vertx.sqlclient.Pool;
+import jakarta.enterprise.event.Observes;
+import org.jboss.logging.Logger;
+
+import java.util.List;
 
 public class DatabaseTokenInitializer {
 

@@ -1,12 +1,11 @@
 package io.quarkiverse.quarkus.security.token.runtime;
 
-import org.jboss.logging.Logger;
-
 import io.quarkiverse.quarkus.security.token.refresh.RefreshTokenCredential;
 import io.quarkiverse.quarkus.security.token.refresh.RefreshTokenStorageProvider;
 import io.smallrye.mutiny.Uni;
 import io.vertx.sqlclient.Pool;
 import io.vertx.sqlclient.Tuple;
+import org.jboss.logging.Logger;
 
 public class DatabaseRefreshTokenStorageProvider implements RefreshTokenStorageProvider {
 

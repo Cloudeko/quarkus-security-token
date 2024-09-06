@@ -1,14 +1,14 @@
 package io.quarkiverse.quarkus.security.token.runtime;
 
-import java.util.Base64;
-import java.util.UUID;
-
 import io.quarkiverse.quarkus.security.token.refresh.RefreshTokenCredential;
 import io.quarkiverse.quarkus.security.token.refresh.RefreshTokenManager;
 import io.quarkiverse.quarkus.security.token.refresh.RefreshTokenStorageProvider;
 import io.quarkiverse.quarkus.security.token.refresh.RefreshTokenUserProvider;
 import io.smallrye.mutiny.Uni;
 import io.vertx.ext.auth.User;
+
+import java.util.Base64;
+import java.util.UUID;
 
 public class DatabaseRefreshTokenManager implements RefreshTokenManager {
 

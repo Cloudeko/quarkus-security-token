@@ -1,13 +1,12 @@
 package io.quarkiverse.quarkus.security.token.runtime;
 
-import jakarta.annotation.Priority;
-import jakarta.enterprise.inject.Produces;
-import jakarta.inject.Inject;
-
 import io.quarkiverse.quarkus.security.token.refresh.RefreshTokenManager;
 import io.quarkiverse.quarkus.security.token.refresh.RefreshTokenStorageProvider;
 import io.quarkiverse.quarkus.security.token.refresh.RefreshTokenUserProvider;
 import io.vertx.sqlclient.Pool;
+import jakarta.annotation.Priority;
+import jakarta.enterprise.inject.Produces;
+import jakarta.inject.Inject;
 
 public class DatabaseTokenProducer {
 

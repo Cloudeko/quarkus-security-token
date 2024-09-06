@@ -1,12 +1,5 @@
 package io.quarkiverse.quarkus.security.token.runtime;
 
-import jakarta.annotation.Priority;
-import jakarta.enterprise.inject.Default;
-import jakarta.enterprise.inject.Instance;
-import jakarta.enterprise.inject.Produces;
-import jakarta.inject.Inject;
-import jakarta.inject.Singleton;
-
 import io.quarkiverse.quarkus.security.token.TokenManager;
 import io.quarkiverse.quarkus.security.token.access.AccessTokenManager;
 import io.quarkiverse.quarkus.security.token.access.AccessTokenStorageProvider;
@@ -14,6 +7,12 @@ import io.quarkiverse.quarkus.security.token.refresh.RefreshTokenManager;
 import io.quarkiverse.quarkus.security.token.refresh.RefreshTokenStorageProvider;
 import io.quarkiverse.quarkus.security.token.refresh.RefreshTokenUserProvider;
 import io.quarkus.arc.DefaultBean;
+import jakarta.annotation.Priority;
+import jakarta.enterprise.inject.Default;
+import jakarta.enterprise.inject.Instance;
+import jakarta.enterprise.inject.Produces;
+import jakarta.inject.Inject;
+import jakarta.inject.Singleton;
 
 public class DefaultTokenProducer {
 

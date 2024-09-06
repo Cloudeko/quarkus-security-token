@@ -1,13 +1,5 @@
 package io.quarkiverse.quarkus.security.token.deployment;
 
-import static io.quarkus.deployment.Capability.*;
-import static io.quarkus.deployment.annotations.ExecutionTime.STATIC_INIT;
-
-import java.util.Arrays;
-import java.util.List;
-
-import jakarta.enterprise.context.Dependent;
-
 import io.quarkiverse.quarkus.security.token.runtime.*;
 import io.quarkus.arc.deployment.AdditionalBeanBuildItem;
 import io.quarkus.arc.deployment.SyntheticBeanBuildItem;
@@ -16,6 +8,13 @@ import io.quarkus.deployment.Capabilities;
 import io.quarkus.deployment.annotations.BuildStep;
 import io.quarkus.deployment.annotations.Record;
 import io.quarkus.deployment.builditem.FeatureBuildItem;
+import jakarta.enterprise.context.Dependent;
+
+import java.util.Arrays;
+import java.util.List;
+
+import static io.quarkus.deployment.Capability.*;
+import static io.quarkus.deployment.annotations.ExecutionTime.STATIC_INIT;
 
 class SecurityTokenProcessor {
 

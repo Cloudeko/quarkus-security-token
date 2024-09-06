@@ -1,12 +1,10 @@
 package io.quarkiverse.quarkus.security.token.it;
 
-import static io.restassured.RestAssured.given;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.notNullValue;
-
+import io.quarkus.test.junit.QuarkusTest;
 import org.junit.jupiter.api.Test;
 
-import io.quarkus.test.junit.QuarkusTest;
+import static io.restassured.RestAssured.given;
+import static org.hamcrest.Matchers.*;
 
 @QuarkusTest
 public class SecurityTokenResourceTest {
@@ -21,7 +19,8 @@ public class SecurityTokenResourceTest {
                 .body(
                         "access_token", notNullValue(),
                         "token_type", is("bearer"),
-                        "expires_in", notNullValue())
+                        "expires_in", notNullValue(),
+                        "refresh_token", nullValue())
                 .extract().as(TokenResponse.class);
 
         given()

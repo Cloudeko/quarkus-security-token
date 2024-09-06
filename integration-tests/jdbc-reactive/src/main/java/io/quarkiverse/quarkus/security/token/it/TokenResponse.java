@@ -1,7 +1,6 @@
 package io.quarkiverse.quarkus.security.token.it;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-
 import io.quarkiverse.quarkus.security.token.Token;
 
 public class TokenResponse {

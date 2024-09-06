@@ -1,9 +1,9 @@
 package io.quarkiverse.quarkus.security.token.runtime;
 
+import io.quarkus.runtime.annotations.Recorder;
+
 import java.util.List;
 import java.util.function.Supplier;
-
-import io.quarkus.runtime.annotations.Recorder;
 
 @Recorder
 public class DatabaseTokenRecorder {
