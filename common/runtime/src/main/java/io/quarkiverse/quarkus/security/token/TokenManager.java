@@ -1,7 +1,5 @@
 package io.quarkiverse.quarkus.security.token;
 
-import io.quarkiverse.quarkus.security.token.refresh.RefreshTokenCredential;
-import io.quarkus.security.credential.TokenCredential;
 import io.smallrye.mutiny.Uni;
 import io.vertx.ext.auth.User;
 
@@ -27,23 +25,27 @@ public interface TokenManager {
         return verifyRefreshToken(token).await().indefinitely();
     }
 
-    default Uni<Void> revokeAccessToken(TokenCredential token) {
+    default Uni<Void> revokeAccessToken(String token) {
         throw new UnsupportedOperationException("Revoke access token is not supported");
     }
 
-    default void revokeAccessTokenBlocking(TokenCredential token) {
+    default void revokeAccessTokenBlocking(String token) {
         revokeAccessToken(token).await().indefinitely();
     }
 
-    default Uni<Void> revokeRefreshToken(RefreshTokenCredential token) {
+    default Uni<Void> revokeRefreshToken(String token) {
         throw new UnsupportedOperationException("Revoke refresh token is not supported");
     }
 
-    default void revokeRefreshTokenBlocking(RefreshTokenCredential token) {
+    default void revokeRefreshTokenBlocking(String token) {
         revokeRefreshToken(token).await().indefinitely();
     }
 
-    default Uni<Token> refreshToken(RefreshTokenCredential token) {
+    default Uni<Token> refreshToken(String token) {
         throw new UnsupportedOperationException("Refreshing token is not supported");
+    }
+
+    default Token refreshTokenBlocking(String token) {
+        return refreshToken(token).await().indefinitely();
     }
 }

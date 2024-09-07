@@ -5,12 +5,12 @@ import java.util.List;
 
 import io.quarkiverse.quarkus.security.token.Token;
 import io.quarkiverse.quarkus.security.token.TokenManager;
+import io.quarkiverse.quarkus.security.token.TokenUserProvider;
 import io.quarkiverse.quarkus.security.token.access.AccessTokenManager;
 import io.quarkiverse.quarkus.security.token.access.AccessTokenStorageProvider;
 import io.quarkiverse.quarkus.security.token.refresh.RefreshTokenCredential;
 import io.quarkiverse.quarkus.security.token.refresh.RefreshTokenManager;
 import io.quarkiverse.quarkus.security.token.refresh.RefreshTokenStorageProvider;
-import io.quarkiverse.quarkus.security.token.refresh.RefreshTokenUserProvider;
 import io.quarkus.security.credential.TokenCredential;
 import io.smallrye.mutiny.Uni;
 import io.smallrye.mutiny.tuples.Tuple2;
@@ -23,18 +23,18 @@ public class DefaultTokenManager implements TokenManager {
 
     private final RefreshTokenManager refreshTokenManager;
     private final RefreshTokenStorageProvider refreshTokenStorageProvider;
-    private final RefreshTokenUserProvider refreshTokenUserProvider;
+    private final TokenUserProvider<RefreshTokenCredential> tokenUserProvider;
 
     public DefaultTokenManager(AccessTokenManager accessTokenManager,
             AccessTokenStorageProvider accessTokenStorageProvider,
             RefreshTokenManager refreshTokenManager,
             RefreshTokenStorageProvider refreshTokenStorageProvider,
-            RefreshTokenUserProvider refreshTokenUserProvider) {
+            TokenUserProvider<RefreshTokenCredential> tokenUserProvider) {
         this.accessTokenManager = accessTokenManager;
         this.accessTokenStorageProvider = accessTokenStorageProvider;
         this.refreshTokenManager = refreshTokenManager;
         this.refreshTokenStorageProvider = refreshTokenStorageProvider;
-        this.refreshTokenUserProvider = refreshTokenUserProvider;
+        this.tokenUserProvider = tokenUserProvider;
     }
 
     @Override
@@ -93,28 +93,38 @@ public class DefaultTokenManager implements TokenManager {
     }
 
     @Override
-    public Uni<Void> revokeRefreshToken(RefreshTokenCredential token) {
+    public Uni<Void> revokeRefreshToken(String token) {
         if (refreshTokenStorageProvider == null) {
             return Uni.createFrom().failure(new IllegalStateException("Refresh token storage provider is not available"));
         }
 
-        return refreshTokenStorageProvider.revokeRefreshToken(token.getRefreshToken());
+        return refreshTokenStorageProvider.revokeRefreshToken(token);
     }
 
     @Override
-    public Uni<Token> refreshToken(RefreshTokenCredential token) {
+    public Uni<Token> refreshToken(String token) {
         if (accessTokenManager == null || refreshTokenManager == null) {
             return Uni.createFrom().failure(new IllegalStateException("Token managers are not available"));
         }
 
         Uni<User> userUni = getUser(token);
-        Uni<RefreshTokenCredential> refreshTokenUni = refreshTokenManager.swapRefreshToken(token.getRefreshToken());
+        Uni<RefreshTokenCredential> refreshTokenUni = refreshTokenManager.swapRefreshToken(token);
 
         return Uni.combine().all().unis(userUni, refreshTokenUni).asTuple().onItem().transform(this::createToken);
     }
 
-    private Uni<User> getUser(RefreshTokenCredential token) {
-        return refreshTokenUserProvider.getUser(token);
+    private Uni<User> getUser(String token) {
+        if (tokenUserProvider == null) {
+            return Uni.createFrom().failure(new IllegalStateException("Token user provider is not available"));
+        }
+
+        if (refreshTokenManager == null) {
+            return Uni.createFrom().failure(new IllegalStateException("Refresh token manager is not available"));
+        }
+
+        Uni<RefreshTokenCredential> refreshTokenUni = refreshTokenManager.findRefreshToken(token);
+
+        return refreshTokenUni.onItem().transformToUni(tokenUserProvider::getUser);
     }
 
     private Token createToken(Tuple2<User, RefreshTokenCredential> tuple) {

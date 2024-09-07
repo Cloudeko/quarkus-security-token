@@ -50,6 +50,13 @@ public class SecurityTokenResource {
         return Response.ok(new TokenResponse(token)).build();
     }
 
+    @POST
+    @Path("/swap")
+    public Response swapToken(@QueryParam("token") String token) {
+        Token newToken = tokenManager.refreshTokenBlocking(token);
+        return Response.ok(new TokenResponse(newToken)).build();
+    }
+
     @GET
     @BearerTokenAuthentication
     public String hello(@Context SecurityContext securityContext) {

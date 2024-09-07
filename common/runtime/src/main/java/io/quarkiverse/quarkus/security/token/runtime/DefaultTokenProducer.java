@@ -8,11 +8,11 @@ import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 
 import io.quarkiverse.quarkus.security.token.TokenManager;
+import io.quarkiverse.quarkus.security.token.TokenUserProvider;
 import io.quarkiverse.quarkus.security.token.access.AccessTokenManager;
 import io.quarkiverse.quarkus.security.token.access.AccessTokenStorageProvider;
 import io.quarkiverse.quarkus.security.token.refresh.RefreshTokenManager;
 import io.quarkiverse.quarkus.security.token.refresh.RefreshTokenStorageProvider;
-import io.quarkiverse.quarkus.security.token.refresh.RefreshTokenUserProvider;
 import io.quarkus.arc.DefaultBean;
 
 public class DefaultTokenProducer {
@@ -30,7 +30,7 @@ public class DefaultTokenProducer {
     Instance<RefreshTokenStorageProvider> refreshTokenStorageProvider;
 
     @Inject
-    Instance<RefreshTokenUserProvider> refreshTokenUserProvider;
+    Instance<TokenUserProvider> refreshTokenUserProvider;
 
     @Produces
     @Singleton
@@ -46,18 +46,18 @@ public class DefaultTokenProducer {
         RefreshTokenStorageProvider refreshTokenStorageProvider = this.refreshTokenStorageProvider.isResolvable()
                 ? this.refreshTokenStorageProvider.get()
                 : null;
-        RefreshTokenUserProvider refreshTokenUserProvider = this.refreshTokenUserProvider.isResolvable()
+        TokenUserProvider tokenUserProvider = this.refreshTokenUserProvider.isResolvable()
                 ? this.refreshTokenUserProvider.get()
                 : null;
 
         return new DefaultTokenManager(accessTokenManager, accessTokenStorageProvider, refreshTokenManager,
-                refreshTokenStorageProvider, refreshTokenUserProvider);
+                refreshTokenStorageProvider, tokenUserProvider);
     }
 
     @Default
     @Produces
     @Priority(1)
-    public RefreshTokenUserProvider refreshTokenUserProvider() {
+    public TokenUserProvider refreshTokenUserProvider() {
         return new DefaultRefreshTokenUserProvider();
     }
 }

@@ -3,10 +3,10 @@ package io.quarkiverse.quarkus.security.token.runtime;
 import java.util.Base64;
 import java.util.UUID;
 
+import io.quarkiverse.quarkus.security.token.TokenUserProvider;
 import io.quarkiverse.quarkus.security.token.refresh.RefreshTokenCredential;
 import io.quarkiverse.quarkus.security.token.refresh.RefreshTokenManager;
 import io.quarkiverse.quarkus.security.token.refresh.RefreshTokenStorageProvider;
-import io.quarkiverse.quarkus.security.token.refresh.RefreshTokenUserProvider;
 import io.smallrye.mutiny.Uni;
 import io.vertx.ext.auth.User;
 
@@ -14,14 +14,14 @@ public class DatabaseRefreshTokenManager implements RefreshTokenManager {
 
     private final DatabaseRefreshTokenConfig config;
     private final RefreshTokenStorageProvider refreshTokenStorageProvider;
-    private final RefreshTokenUserProvider refreshTokenUserProvider;
+    private final TokenUserProvider<RefreshTokenCredential> tokenUserProvider;
 
     public DatabaseRefreshTokenManager(DatabaseRefreshTokenConfig config,
             RefreshTokenStorageProvider refreshTokenStorageProvider,
-            RefreshTokenUserProvider refreshTokenUserProvider) {
+            TokenUserProvider<RefreshTokenCredential> tokenUserProvider) {
         this.config = config;
         this.refreshTokenStorageProvider = refreshTokenStorageProvider;
-        this.refreshTokenUserProvider = refreshTokenUserProvider;
+        this.tokenUserProvider = tokenUserProvider;
     }
 
     @Override
@@ -42,6 +42,11 @@ public class DatabaseRefreshTokenManager implements RefreshTokenManager {
     }
 
     @Override
+    public Uni<RefreshTokenCredential> findRefreshToken(String refreshToken) {
+        return refreshTokenStorageProvider.getRefreshToken(refreshToken);
+    }
+
+    @Override
     public Uni<Boolean> verifyToken(String token) {
         return refreshTokenStorageProvider.getRefreshToken(token)
                 .map(refreshToken -> refreshToken != null && refreshToken.isValid());
@@ -54,7 +59,7 @@ public class DatabaseRefreshTokenManager implements RefreshTokenManager {
                 return null;
             }
 
-            return refreshTokenUserProvider.getUser(token).map(user -> {
+            return tokenUserProvider.getUser(token).map(user -> {
                 if (user == null) {
                     return null;
                 }

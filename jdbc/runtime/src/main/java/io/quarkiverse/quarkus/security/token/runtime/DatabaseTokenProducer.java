@@ -4,9 +4,9 @@ import jakarta.annotation.Priority;
 import jakarta.enterprise.inject.Produces;
 import jakarta.inject.Inject;
 
+import io.quarkiverse.quarkus.security.token.TokenUserProvider;
 import io.quarkiverse.quarkus.security.token.refresh.RefreshTokenManager;
 import io.quarkiverse.quarkus.security.token.refresh.RefreshTokenStorageProvider;
-import io.quarkiverse.quarkus.security.token.refresh.RefreshTokenUserProvider;
 import io.vertx.sqlclient.Pool;
 
 public class DatabaseTokenProducer {
@@ -17,9 +17,9 @@ public class DatabaseTokenProducer {
     @Produces
     @Priority(Byte.MAX_VALUE)
     public RefreshTokenManager refreshTokenManager(RefreshTokenStorageProvider refreshTokenStorageProvider,
-            RefreshTokenUserProvider refreshTokenUserProvider) {
+            TokenUserProvider tokenUserProvider) {
         return new DatabaseRefreshTokenManager(databaseRefreshTokenConfig, refreshTokenStorageProvider,
-                refreshTokenUserProvider);
+                tokenUserProvider);
     }
 
     @Produces

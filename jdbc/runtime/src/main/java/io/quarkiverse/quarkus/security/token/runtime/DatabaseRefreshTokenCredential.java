@@ -1,7 +1,7 @@
 package io.quarkiverse.quarkus.security.token.runtime;
 
+import io.quarkiverse.quarkus.security.token.TokenUserProvider;
 import io.quarkiverse.quarkus.security.token.refresh.RefreshTokenCredential;
-import io.quarkiverse.quarkus.security.token.refresh.RefreshTokenUserProvider;
 import io.smallrye.mutiny.Uni;
 import io.vertx.ext.auth.User;
 import io.vertx.sqlclient.Row;
@@ -14,7 +14,7 @@ public class DatabaseRefreshTokenCredential implements RefreshTokenCredential {
     private final long expirationTime;
     private final long issuedAt;
 
-    private RefreshTokenUserProvider userProvider;
+    private TokenUserProvider userProvider;
 
     public DatabaseRefreshTokenCredential(Row row) {
         this.subject = row.getString("subject");
@@ -61,11 +61,11 @@ public class DatabaseRefreshTokenCredential implements RefreshTokenCredential {
         return userProvider.getUser(this);
     }
 
-    public RefreshTokenUserProvider getUserProvider() {
+    public TokenUserProvider getUserProvider() {
         return userProvider;
     }
 
-    public void setUserProvider(RefreshTokenUserProvider userProvider) {
+    public void setUserProvider(TokenUserProvider userProvider) {
         this.userProvider = userProvider;
     }
 }
