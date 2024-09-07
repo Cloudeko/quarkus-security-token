@@ -16,12 +16,6 @@
  */
 package io.quarkiverse.quarkus.security.token.it;
 
-import io.quarkiverse.quarkus.security.token.Token;
-import io.quarkiverse.quarkus.security.token.TokenManager;
-import io.quarkus.security.runtime.QuarkusPrincipal;
-import io.quarkus.security.runtime.QuarkusSecurityIdentity;
-import io.quarkus.smallrye.jwt.runtime.auth.BearerTokenAuthentication;
-import io.quarkus.vertx.http.runtime.security.QuarkusHttpUser;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.GET;
@@ -31,6 +25,13 @@ import jakarta.ws.rs.QueryParam;
 import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.SecurityContext;
+
+import io.quarkiverse.quarkus.security.token.Token;
+import io.quarkiverse.quarkus.security.token.TokenManager;
+import io.quarkus.security.runtime.QuarkusPrincipal;
+import io.quarkus.security.runtime.QuarkusSecurityIdentity;
+import io.quarkus.smallrye.jwt.runtime.auth.BearerTokenAuthentication;
+import io.quarkus.vertx.http.runtime.security.QuarkusHttpUser;
 
 @Path("/security-token")
 @ApplicationScoped

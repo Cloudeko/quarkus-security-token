@@ -1,5 +1,8 @@
 package io.quarkiverse.quarkus.security.token.runtime;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import io.quarkiverse.quarkus.security.token.Token;
 import io.quarkiverse.quarkus.security.token.TokenManager;
 import io.quarkiverse.quarkus.security.token.access.AccessTokenManager;
@@ -12,9 +15,6 @@ import io.quarkus.security.credential.TokenCredential;
 import io.smallrye.mutiny.Uni;
 import io.smallrye.mutiny.tuples.Tuple2;
 import io.vertx.ext.auth.User;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class DefaultTokenManager implements TokenManager {
 

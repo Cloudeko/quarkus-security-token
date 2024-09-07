@@ -1,5 +1,10 @@
 package io.quarkiverse.quarkus.security.token.jwt;
 
+import java.util.Objects;
+
+import org.eclipse.microprofile.jwt.JsonWebToken;
+import org.jboss.logging.Logger;
+
 import io.quarkiverse.quarkus.security.token.access.AccessTokenManager;
 import io.quarkus.security.credential.TokenCredential;
 import io.quarkus.security.identity.SecurityIdentity;
@@ -10,10 +15,6 @@ import io.smallrye.jwt.build.Jwt;
 import io.smallrye.jwt.build.JwtClaimsBuilder;
 import io.smallrye.mutiny.Uni;
 import io.vertx.ext.auth.User;
-import org.eclipse.microprofile.jwt.JsonWebToken;
-import org.jboss.logging.Logger;
-
-import java.util.Objects;
 
 public class JsonWebAccessTokenManager implements AccessTokenManager {
 
